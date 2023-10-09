@@ -1,0 +1,12 @@
+{
+  "name": "hollyfund",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:frontend": "pnpm -F frontend dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
