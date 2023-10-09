@@ -1,6 +1,6 @@
-smartcontract/cache
-smartcontract/artifacts
-smartcontract/typechain-types
+/**/smartcontract/cache
+/**/smartcontract/artifacts
+/**/smartcontract/typechain-types
 
 .idea
 # Logs

@@ -4,11 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-<<<<<<< HEAD:smartcontract/package.json
     "test": "hardhat test"
-=======
-    "test": "echo \\\"Error: no test specified\\\" && exit 1"
->>>>>>> cd7823358b0bbcd05093dda75c34417881d0afcb:workspaces/smartcontract/package.json
   },
   "author": "",
   "license": "ISC",
