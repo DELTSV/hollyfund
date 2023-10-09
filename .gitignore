@@ -1,0 +1,6 @@
+smartcontract/cache
+smartcontract/artifacts
+smartcontract/typechain-types
+
+node_modules
+.idea
