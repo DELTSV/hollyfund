@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:frontend": "pnpm -F frontend dev"
+    "dev:frontend": "pnpm -F frontend dev",
+    "dev:backend": "pnpm -F backend start:dev"
   },
   "keywords": [],
   "author": "",
