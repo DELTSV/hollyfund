@@ -50,3 +50,4 @@ dist-ssr
 !.vscode/launch.json
 
 workspaces/smartcontract/ignition/deployments/
+.env
