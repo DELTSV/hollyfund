@@ -15,30 +15,56 @@ describe("HollyFund", function () {
     const HollyFund = await ethers.getContractFactory("HollyFund",  owner);
 
     const contract = await HollyFund.deploy(300);
+
+    await contract.waitForDeployment();
+
+    await contract.createCampaign(title, targetAmount);
+
     return { contract, title, targetAmount, owner, otherAccount, investAmount };
   }
 
   describe('Create campaign', function () {
     it('should not create campaign', async () => {
-      const {contract, title} = await loadFixture(
+      const { contract } = await loadFixture(
+        deployOneYearLockFixture
+      );
+
+      await expect(contract.createCampaign(
+        "title",
+        0
+      )).to.be.revertedWith("Target amount must be greater than 0");
+    });
+
+    it('should not create campaign if it already exists', async () => {
+      const { contract, title, targetAmount } = await loadFixture(
         deployOneYearLockFixture
       );
 
       await expect(contract.createCampaign(
         title,
-        0
-      )).to.be.reverted;
+        targetAmount,
+      )).to.be.revertedWith("Campaign already exists");
     });
 
     it('should create campaign', async () => {
-      const {contract, title, targetAmount} = await loadFixture(
+      const {contract, targetAmount} = await loadFixture(
         deployOneYearLockFixture
       );
 
       await expect(contract.createCampaign(
-        title,
+        "title",
         targetAmount
       )).to.not.be.reverted;
+    });
+
+    it("Should emit an event on create a campaign", async function () {
+      const { targetAmount, contract } = await loadFixture(
+        deployOneYearLockFixture
+      );
+
+      await expect(contract.createCampaign("title", targetAmount))
+        .to.emit(contract, "NewCampaign")
+        .withArgs("title", targetAmount);
     });
   });
 
@@ -88,52 +114,95 @@ describe("HollyFund", function () {
   });
 
   describe("Invest", function () {
-    describe("Validations", function () {
-      it("Should invest in a campaign", async function () {
-        const {contract, title, investAmount, otherAccount} = await loadFixture(
-          deployOneYearLockFixture
-        );
+    it("Should invest in a campaign", async function () {
+      const {contract, title, investAmount, otherAccount} = await loadFixture(
+        deployOneYearLockFixture
+      );
 
-        await contract.transfer(otherAccount.address, 50);
-        await contract.connect(otherAccount).approve(contract.getAddress(), investAmount);
+      await contract.transfer(otherAccount.address, 50);
+      await contract.connect(otherAccount).approve(contract.getAddress(), investAmount);
 
-        await expect(contract.connect(otherAccount).invest(title, { value: investAmount })).not.to.be.reverted;
-      });
-
-      it("Should pay invest amount", async function () {
-        const {contract, title, investAmount} = await loadFixture(
-          deployOneYearLockFixture
-        );
-
-        await contract.approve(contract.getAddress(), investAmount);
-
-        await expect(contract.invest(title, { value: investAmount }))
-          .to.emit(contract, "NewInvestment")
-          .withArgs(title, investAmount);
-      });
+      await expect(contract.connect(otherAccount).invest(title, { value: investAmount })).not.to.be.reverted;
     });
 
-    describe("Events", function () {
-      it("Should emit an event on create a campaign", async function () {
-        const {title, targetAmount, contract} = await loadFixture(
-          deployOneYearLockFixture
-        );
+    it("Should pay invest amount", async function () {
+      const {contract, title, investAmount, otherAccount} = await loadFixture(
+        deployOneYearLockFixture
+      );
 
-        await expect(contract.createCampaign(title, targetAmount))
-          .to.emit(contract, "NewCampaign")
-          .withArgs(title, targetAmount);
-      });
+      await contract.transfer(otherAccount.address, 50);
+      await contract.connect(otherAccount).approve(contract.getAddress(), investAmount);
+
+      await expect(contract.connect(otherAccount).invest(title, { value: investAmount }))
+        .to.emit(contract, "NewInvestment")
+        .withArgs(title, investAmount);
     });
   });
 
   describe("Get campaign", function () {
     it("Should not get a campaign", async function () {
+      const {contract} = await loadFixture(
+        deployOneYearLockFixture
+      );
+
+      await expect(contract.getCampaign("title"))
+        .to.be.revertedWith("Campaign does not exist");
+    });
+
+    it("Should get a campaign", async function () {
       const {contract, title} = await loadFixture(
         deployOneYearLockFixture
       );
 
       await expect(contract.getCampaign(title))
+        .not.to.be.reverted;
+    });
+  });
+
+  describe("Claim funds", function () {
+    it("Should not claim funds if campaign doesnt exists", async function () {
+      const {contract} = await loadFixture(
+        deployOneYearLockFixture
+      );
+
+      await expect(contract.claim("title"))
         .to.be.revertedWith("Campaign does not exist");
+    });
+
+    it("Should not claim funds if campaign not completed", async function () {
+      const {contract, title} = await loadFixture(
+        deployOneYearLockFixture
+      );
+
+      await expect(contract.claim(title))
+        .to.be.revertedWith("Campaign is not completed");
+    });
+
+    it("Should not claim funds if im not the producer", async function () {
+      const {contract, title, otherAccount, targetAmount} = await loadFixture(
+        deployOneYearLockFixture
+      );
+
+      await contract.transfer(otherAccount.address, targetAmount);
+      await contract.connect(otherAccount).approve(contract.getAddress(), targetAmount);
+
+      await contract.connect(otherAccount).invest(title, { value: targetAmount });
+
+      await expect(contract.connect(otherAccount).claim(title))
+        .to.be.revertedWith("Only producer can claim");
+    });
+
+    it("Should claim funds", async function () {
+      const {contract, title, otherAccount, targetAmount} = await loadFixture(
+        deployOneYearLockFixture
+      );
+
+      await contract.transfer(otherAccount.address, targetAmount);
+      await contract.connect(otherAccount).approve(contract.getAddress(), targetAmount);
+
+      await contract.connect(otherAccount).invest(title, { value: targetAmount });
+
+      await expect(contract.claim(title)).not.to.be.reverted;
     });
   });
 });
