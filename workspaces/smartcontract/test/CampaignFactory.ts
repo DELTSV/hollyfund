@@ -4,38 +4,40 @@ import {
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-describe("CampaignFactory", function () {
+describe("HollyFund", function () {
   async function deployOneYearLockFixture() {
     const title = "The Matrix";
     const targetAmount = 120;
-    const investAmount = 10;
+    const investAmount = 1;
 
     const [owner, otherAccount] = await ethers.getSigners();
 
-    const CampaignFactory = await ethers.getContractFactory("CampaignFactory");
-    const campaignFactory = await CampaignFactory.deploy();
+    console.log("Balance: ", await ethers.provider.getBalance(otherAccount.address));
 
-    return { campaignFactory, title, targetAmount, owner, otherAccount, investAmount };
+    const HollyFund = await ethers.getContractFactory("HollyFund",  owner);
+
+    const contract = await HollyFund.deploy();
+    return { contract, title, targetAmount, owner, otherAccount, investAmount };
   }
 
   describe('Create campaign', function () {
     it('should not create campaign', async () => {
-      const {campaignFactory, title} = await loadFixture(
+      const {contract, title} = await loadFixture(
         deployOneYearLockFixture
       );
 
-      await expect(campaignFactory.createCampaign(
+      await expect(contract.createCampaign(
         title,
         0
       )).to.be.reverted;
     });
 
     it('should create campaign', async () => {
-      const {campaignFactory, title, targetAmount} = await loadFixture(
+      const {contract, title, targetAmount} = await loadFixture(
         deployOneYearLockFixture
       );
 
-      await expect(campaignFactory.createCampaign(
+      await expect(contract.createCampaign(
         title,
         targetAmount
       )).to.not.be.reverted;
@@ -45,32 +47,35 @@ describe("CampaignFactory", function () {
   describe("Invest", function () {
     describe("Validations", function () {
       it("Should invest in a campaign", async function () {
-        const {campaignFactory, title, investAmount} = await loadFixture(
+        const {contract, title, investAmount, otherAccount} = await loadFixture(
           deployOneYearLockFixture
         );
 
-        await expect(campaignFactory.invest(title, { value: investAmount })).not.to.be.reverted;
+        // set allowance
+        await contract.approve(contract.getAddress(), investAmount);
+
+        await expect(contract.connect(otherAccount).invest(title, { value: investAmount })).not.to.be.reverted;
       });
 
       it("Should pay invest amount", async function () {
-        const {campaignFactory, title, investAmount} = await loadFixture(
+        const {contract, title, investAmount} = await loadFixture(
           deployOneYearLockFixture
         );
 
-        await expect(campaignFactory.invest(title, { value: investAmount }))
-          .to.emit(campaignFactory, "NewInvestment")
+        await expect(contract.invest(title, { value: investAmount }))
+          .to.emit(contract, "NewInvestment")
           .withArgs(title, investAmount);
       });
     });
 
     describe("Events", function () {
       it("Should emit an event on create a campaign", async function () {
-        const {title, targetAmount, campaignFactory} = await loadFixture(
+        const {title, targetAmount, contract} = await loadFixture(
           deployOneYearLockFixture
         );
 
-        await expect(campaignFactory.createCampaign(title, targetAmount))
-          .to.emit(campaignFactory, "NewCampaign")
+        await expect(contract.createCampaign(title, targetAmount))
+          .to.emit(contract, "NewCampaign")
           .withArgs(title, targetAmount);
       });
     });
@@ -78,11 +83,11 @@ describe("CampaignFactory", function () {
 
   describe("Get campaign", function () {
     it("Should not get a campaign", async function () {
-      const {campaignFactory, title} = await loadFixture(
+      const {contract, title} = await loadFixture(
         deployOneYearLockFixture
       );
 
-      await expect(campaignFactory.getCampaign(title))
+      await expect(contract.getCampaign(title))
         .to.be.revertedWith("Campaign does not exist");
     });
   });

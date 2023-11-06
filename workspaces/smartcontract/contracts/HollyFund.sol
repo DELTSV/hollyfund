@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.20;
 
-contract CampaignFactory {
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract HollyFund is ERC20 {
     event NewCampaign(string name, uint targetAmount);
 
     event NewInvestment(string name, uint investAmount);
@@ -15,6 +17,9 @@ contract CampaignFactory {
     struct Investment {
         address investor;
         uint amount;
+    }
+
+    constructor() ERC20("HollyFund", "HF") {
     }
 
     mapping (string => address) public campaignToProducer;
@@ -33,6 +38,10 @@ contract CampaignFactory {
         Campaign storage campaign = campaigns[_name];
         campaign.totalAmount += msg.value;
         campaignToInvestments[_name][msg.sender] += msg.value;
+
+//        this.approve(msg.sender, msg.value);
+        this.transferFrom(msg.sender, address(this), msg.value);
+
         emit NewInvestment(_name, msg.value);
     }
 
