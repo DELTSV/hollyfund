@@ -4,11 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "hardhat test"
+    "test": "hardhat test",
+    "node": "hardhat node",
+    "start": "hardhat run --network localhost scripts/deploy.ts",
+    "deploy": "hardhat ignition deploy ignition/modules/HollyFund.ts --network localhost"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@nomicfoundation/hardhat-ignition": "^0.11.1",
     "@nomicfoundation/hardhat-toolbox": "^3.0.0",
     "hardhat": "^2.18.0"
   },
