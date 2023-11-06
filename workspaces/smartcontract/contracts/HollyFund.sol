@@ -19,7 +19,8 @@ contract HollyFund is ERC20 {
         uint amount;
     }
 
-    constructor() ERC20("HollyFund", "HF") {
+    constructor(uint256 initialSupply) ERC20("Dollar", "USD") {
+        _mint(msg.sender, initialSupply);
     }
 
     mapping (string => address) public campaignToProducer;
@@ -39,7 +40,6 @@ contract HollyFund is ERC20 {
         campaign.totalAmount += msg.value;
         campaignToInvestments[_name][msg.sender] += msg.value;
 
-//        this.approve(msg.sender, msg.value);
         this.transferFrom(msg.sender, address(this), msg.value);
 
         emit NewInvestment(_name, msg.value);
