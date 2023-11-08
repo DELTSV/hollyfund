@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "hardhat test",
+    "test": "hardhat test --network hardhat",
     "node": "hardhat node",
-    "start": "hardhat run --network localhost scripts/deploy.ts",
     "compile": "hardhat compile",
     "deploy": "hardhat ignition deploy ignition/modules/HollyFund.ts --network sepolia"
   },
