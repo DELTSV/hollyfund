@@ -22,7 +22,14 @@ describe("HollyFund", function () {
 
     await contract.createCampaign(title, targetAmount);
 
-    return {contract, title, targetAmount, owner, otherAccount, investAmount};
+    const expectedCampaign = [
+      title,
+      0n,
+      targetAmount,
+      owner.address,
+    ];
+
+    return {contract, title, targetAmount, owner, otherAccount, investAmount, expectedCampaign};
   }
 
   describe('Create campaign', function () {
@@ -139,7 +146,7 @@ describe("HollyFund", function () {
     });
 
     it("Should retrieve the money from the sender", async function () {
-      const {contract, title, otherAccount, investAmount, owner} = await loadFixture(
+      const {contract, title, otherAccount, investAmount} = await loadFixture(
         deployOneYearLockFixture
       );
 
@@ -175,15 +182,13 @@ describe("HollyFund", function () {
 
   describe("Get all campaigns", function () {
     it("Should get all campaigns", async function () {
-      const {contract, title} = await loadFixture(
+      const {contract, expectedCampaign} = await loadFixture(
         deployOneYearLockFixture
       );
 
-      console.log(await contract.getAllCampaigns());
+      const result = await contract.getAllCampaigns();
 
-      // await expect(contract.getCampaigns())
-      //   .to.emit(contract, "NewCampaign")
-      //   .withArgs(title);
+      expect([...result.map((c) => [...c])]).to.eql([expectedCampaign]);
     });
   });
 
@@ -198,12 +203,11 @@ describe("HollyFund", function () {
     });
 
     it("Should get a campaign", async function () {
-      const {contract, title} = await loadFixture(
+      const {contract, title, expectedCampaign} = await loadFixture(
         deployOneYearLockFixture
       );
 
-      await expect(contract.getCampaign(title))
-        .not.to.be.reverted;
+      expect(await contract.getCampaign(title)).not.to.be.eq(expectedCampaign);
     });
   });
 

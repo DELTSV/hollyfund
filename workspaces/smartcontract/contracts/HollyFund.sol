@@ -58,7 +58,8 @@ contract HollyFund is ERC20 {
     function createCampaign(string calldata _name, uint256 _targetAmount) public isCampaignAlreadyExists(_name) {
         require(_targetAmount != 0, "Target amount must be greater than 0");
 
-        campaigns[_name] = Campaign(_name, 0, _targetAmount, msg.sender, true);
+        Campaign memory newCampaign = Campaign(_name, 0, _targetAmount, msg.sender, true);
+        campaigns[_name] = newCampaign;
         _campaignNames.push(_name);
         emit NewCampaign(_name, _targetAmount);
     }
@@ -78,19 +79,20 @@ contract HollyFund is ERC20 {
         emit NewInvestment(_name, msg.value);
     }
 
-    function getAllCampaigns() public view returns (Campaign[] memory) {
-        Campaign[] memory campaignsArray = new Campaign[](_campaignNames.length);
+    function getAllCampaigns() public view returns (CampaignDto[] memory) {
+        CampaignDto[] memory campaignsArray = new CampaignDto[](_campaignNames.length);
 
         for (uint i = 0; i < _campaignNames.length; i++) {
-            campaignsArray[i] = campaigns[_campaignNames[i]];
+            Campaign storage campaign = campaigns[_campaignNames[i]];
+            campaignsArray[i] = CampaignDto(campaign.title, campaign.totalAmount, campaign.targetAmount, campaign.producer);
         }
 
         return campaignsArray;
     }
 
-    function getCampaign(string calldata _name) public isCampaignExists(_name) view returns (string memory, uint256, uint256) {
+    function getCampaign(string calldata _name) public isCampaignExists(_name) view returns (CampaignDto memory) {
         Campaign storage campaign = campaigns[_name];
-        return (campaign.title, campaign.targetAmount, campaign.totalAmount);
+        return CampaignDto(campaign.title, campaign.totalAmount, campaign.targetAmount, campaign.producer);
     }
 
     function getInvestment(string calldata _name) public isCampaignExists(_name) view returns (uint256) {
