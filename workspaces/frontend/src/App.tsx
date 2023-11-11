@@ -1,6 +1,6 @@
 import './App.css';
-import {CampaignList} from "./features/campaign";
+import {CampaignContextWrapper, CampaignList} from "./features/campaign";
 
 export const App = () => {
-  return <CampaignList/>;
+  return <CampaignContextWrapper><CampaignList/></CampaignContextWrapper>;
 }
