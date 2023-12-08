@@ -7,10 +7,19 @@ type CampaignCardProps = {
 }
 
 export const CampaignCard = ({campaign, onClick}: CampaignCardProps) => {
-  const percentage = useMemo(() => campaign.totalAmount/campaign.targetAmount*100, [campaign])
+  const [funds, percentage] = useMemo(() => {
+    const funds = Number(campaign.totalAmount), target = Number(campaign.targetAmount);
+    return [funds, funds/target*100]
+  }, [campaign])
   const handleClick = () => onClick(campaign.title);
 
-  return <button onClick={handleClick}>
-    {percentage}
-  </button>;
+  return <li>
+    <button onClick={handleClick}>
+      <h3>{campaign.title}</h3>
+      <footer>
+        <h4>{funds} ETH raised</h4>
+        <h5>{percentage}% funded</h5>
+      </footer>
+    </button>
+  </li>;
 }

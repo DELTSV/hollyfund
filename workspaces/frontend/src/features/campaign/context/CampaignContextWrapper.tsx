@@ -1,14 +1,18 @@
 import {createContext, ReactNode, useEffect, useMemo, useState} from "react";
+import {Campaign} from "../types";
 import {useSDK} from "@metamask/sdk-react";
-import {Contract, Web3} from "web3";
-import {campaignContractAbi} from ".";
+import {Web3} from "web3";
+import {campaignContractAbi} from "./index.ts";
+
+type ContextCampaignsList = Campaign[] | undefined | null;
 
 export type CampaignContextType = {
-  contract?: Contract<any>;
-  account?: string;
+  campaigns?: ContextCampaignsList,
 }
 
-export const CampaignContext = createContext<CampaignContextType>({});
+export const CampaignContext = createContext<CampaignContextType>({
+  campaigns: undefined,
+});
 
 type Props = {
   children: ReactNode
@@ -16,23 +20,11 @@ type Props = {
 
 export const CampaignContextWrapper = ({children}: Props) => {
   const {account, provider} = useSDK();
-  const [isCryptoReady, setIsCryptoReady] = useState(false);
-
-  useEffect(() => {
-    if (!provider) return;
-
-    provider.request({
-      method: "wallet_getPermissions",
-      params: []
-    }).then(
-      _onFulfilled => setIsCryptoReady(true),
-      _onRejected => setIsCryptoReady(false),
-    )
-  }, [provider]);
+  const [campaigns, setCampaigns] = useState<ContextCampaignsList>(undefined);
 
   const contract = useMemo(
     () => {
-      if (!account || !provider || !isCryptoReady) return;
+      if (!account || !provider) return;
 
       const web3 = new Web3({
         provider,
@@ -46,10 +38,25 @@ export const CampaignContextWrapper = ({children}: Props) => {
         {gas: "3000000"}
       )
     },
-    [account, provider, isCryptoReady]
+    [account, provider]
   );
 
-  return <CampaignContext.Provider value={{contract, account}}>
+  const updateCampaignsList = () => {
+    if (!contract || !account) return;
+
+    contract.methods.getAllCampaigns().call({from: account}).then(
+      data => setCampaigns(data as Campaign[]),
+      _error => setCampaigns(null),
+    )
+  }
+
+  useEffect(() => {
+    if (contract && account && campaigns === undefined) {
+      updateCampaignsList()
+    }
+  }, [contract, account]);
+
+  return <CampaignContext.Provider value={{campaigns}}>
     {children}
   </CampaignContext.Provider>;
 }

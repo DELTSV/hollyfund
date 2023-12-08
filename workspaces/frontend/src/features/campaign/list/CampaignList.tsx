@@ -1,33 +1,23 @@
-import {useContext, useEffect, useState} from "react";
+import {useContext} from "react";
 import {CampaignContext} from "../context";
-import {Campaign} from "../types";
+import {CampaignCard} from "../";
 
 export const CampaignList = () => {
-  const {contract, account} = useContext(CampaignContext);
-  const [campaigns, setCampaigns] = useState<Campaign[]>([])
+  const {campaigns} = useContext(CampaignContext);
 
-  console.log(campaigns);
-
-  useEffect(() => {
-    if (!contract) return;
-    contract
-      .methods
-      .getAllCampaigns()
-      .call()
-      .then(fulfilled => setCampaigns(fulfilled as Campaign[]))
-  }, [contract]);
-
-  const createCampaign = () => {
-    if (!account || !contract) return;
-
-    contract
-      .methods
-      .createCampaign("bob", 220)
-      .send({from: account});
-  }
-
+  if (campaigns === undefined) return <p>We are loading campaigns list</p>;
+  else if (campaigns === null) return <p>We have trouble loading campaign list</p>;
+  else if (campaigns.length === 0) return <p>We have trouble loading campaign list</p>;
   return <>
-    <p>this is campaign list</p>
-    <button onClick={createCampaign}>create campaign</button>
+    <h2>Explore <span>{campaigns.length} projects</span></h2>
+    <ul>
+      {campaigns.map(campaign =>
+        <CampaignCard
+          key={campaign.title}
+          campaign={campaign}
+          onClick={_ => {}}
+        />
+      )}
+    </ul>
   </>;
 }
