@@ -1,5 +1,6 @@
 import {Campaign} from "../";
 import {useMemo} from "react";
+import {card} from "./CampaignCard.module.css";
 
 type CampaignCardProps = {
   campaign: Campaign
@@ -13,7 +14,7 @@ export const CampaignCard = ({campaign, onClick}: CampaignCardProps) => {
   }, [campaign])
   const handleClick = () => onClick(campaign.title);
 
-  return <li>
+  return <li className={card}>
     <button onClick={handleClick}>
       <h3>{campaign.title}</h3>
       <footer>
