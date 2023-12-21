@@ -1,3 +1,25 @@
+@keyframes appear {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes blur {
+  from {
+    background: #00000000;
+    backdrop-filter: blur(0);
+  }
+  to {}
+}
+
 .details {
   position: fixed;
   top: 0;
@@ -9,11 +31,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(4px);
   cursor: pointer;
+  animation: blur 0.3s;
+  transition: 0.2s;
+
+  &:active {
+    background: #00000000;
+    backdrop-filter: blur(0);
+
+    article > * {
+      transform: scale(0);
+      opacity: 0;
+    }
+  }
 
   article {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     max-height: calc(80vh - 3rem);
     max-width: calc(80vw - 3rem);
     width: 800px;
@@ -28,6 +65,12 @@
     overflow-y: auto;
     overflow-x: hidden;
     cursor: auto;
+
+    &> * {
+      transform-origin: left center;
+      animation: appear 0.3s;
+      transition: 0.2s;
+    }
 
     &::before {
       content: "";

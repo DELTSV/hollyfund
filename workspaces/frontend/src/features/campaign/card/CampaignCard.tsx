@@ -22,7 +22,7 @@ export const CampaignCard = ({isActive, campaign, onClick}: CampaignCardProps) =
     const current = box.current.getBoundingClientRect();
     onClick({
       campaignTitle: campaign.title,
-      cardCenter: {
+      campaignCard: {
         x: current.x + current.width/2,
         y: current.y + current.height/2,
       }
