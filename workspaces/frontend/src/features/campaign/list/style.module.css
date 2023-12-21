@@ -1,0 +1,13 @@
+.title{
+    color: white;
+
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.list {
+    display: grid;
+    list-style: none;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
