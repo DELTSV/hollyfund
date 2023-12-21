@@ -1,22 +1,36 @@
-import {Campaign} from "../";
-import {useMemo} from "react";
+import {Campaign, SelectedCard} from "../";
+import {createRef, useMemo} from "react";
 import {card, bar, progress} from "./style.module.css";
 import {gradientText, gradientBar} from "../../../utils";
 
 type CampaignCardProps = {
-  campaign: Campaign
-  onClick: (title: string) => void;
+  isActive: boolean;
+  campaign: Campaign;
+  onClick: (card: SelectedCard) => void;
 }
 
-export const CampaignCard = ({campaign, onClick}: CampaignCardProps) => {
+export const CampaignCard = ({isActive, campaign, onClick}: CampaignCardProps) => {
+  const box = createRef<HTMLLIElement>()
   const [funds, target, percentage] = useMemo(() => {
     const funds = Number(campaign.totalAmount), target = Number(campaign.targetAmount);
     return [funds, target, funds/target*100]
   }, [campaign])
-  const handleClick = () => onClick(campaign.title);
 
-  return <li className={card} onClick={handleClick}>
-    <button>
+  const handleClick = () => {
+    if (!box.current) return;
+    
+    const current = box.current.getBoundingClientRect();
+    onClick({
+      campaignTitle: campaign.title,
+      cardCenter: {
+        x: current.x + current.width/2,
+        y: current.y + current.height/2,
+      }
+    })
+  };
+
+  return <li className={card} onClick={handleClick} ref={box}>
+    { !isActive && <button>
       <h3>{campaign.title}</h3>
       <footer>
         <h4><span className={gradientText}>{funds}</span> / {target} ETH raised</h4>
@@ -25,6 +39,6 @@ export const CampaignCard = ({campaign, onClick}: CampaignCardProps) => {
         </div>
         <h5 className={gradientText}>{percentage}% funded</h5>
       </footer>
-    </button>
+    </button> }
   </li>;
 }
