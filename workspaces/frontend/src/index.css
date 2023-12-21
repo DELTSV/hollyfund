@@ -4,20 +4,123 @@
 }
 
 body {
-    background: linear-gradient(#211f69, #010121) fixed;
-    background-size: 100vw 100vh;
     font-family: "dosis";
+    background-size: 100%;
 }
 
-#blur {
-    background: url("noise.png");
-    background-size: 500%;
+@keyframes blink {
+    from {
+        transform: scale(0.6) translate(-10%, 20%);
+    }
+    50% {
+        transform: scale(1) translate(-5%, -20%);
+    }
+    to {
+        transform: scale(1.6) translate(10%, -30%);
+    }
+}
+
+#background {
     position: fixed;
     height: 100%;
     width: 100%;
     z-index: -1;
-    mix-blend-mode: soft-light;
-    opacity: 0.02;
+    background: black;
+
+
+    #noise {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        mix-blend-mode: soft-light;
+        opacity: 0.5;
+
+        & > div {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background: url("noise.png");
+
+            &:nth-of-type(1) {
+                background-size: 50%;
+                mix-blend-mode: overlay;
+            }
+            &:nth-of-type(2) {
+                background-size: 9000%;
+                filter: blur(100px) contrast(800) blur(100px) contrast(0.6);
+                mix-blend-mode: overlay;
+                padding: 200px;
+                margin: -200px;
+                opacity: 0.5;
+    
+            }
+            &:nth-of-type(3) {
+                filter: contrast(400) blur(4px) contrast(400) blur(4px) contrast(200) blur(2px);
+                padding: 200px;
+                margin: -200px;
+                background-size: 20%;
+                mix-blend-mode: soft-light;
+                opacity: 0.08;
+            }
+            &:nth-of-type(4) {
+                filter: contrast(400) blur(10px) contrast(400) blur(0px);
+                padding: 200px;
+                margin: -200px;
+                background-size: 200%;
+                mix-blend-mode: soft-light;
+                opacity: 0.10;
+            }
+            &:nth-of-type(5) {
+                background-size: 200%;
+                mix-blend-mode: overlay;
+                opacity: 0.80;
+            }
+            &:nth-of-type(6) {
+                background-size: 30%;
+                filter: contrast(20);
+                mix-blend-mode: hard-light;
+                opacity: 0.2;
+            }
+        }
+    }
+    #light {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        filter: blur(30px) contrast(120) blur(70px) contrast(20) blur(50px);
+        mix-blend-mode: plus-light;
+
+        & > div {
+            background: radial-gradient(#3fedd6 50%, #000000, #100288 55%);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            position: absolute;
+            animation: blink 10s infinite linear;
+
+            &:nth-of-type(3) {
+                width: 40vw;
+                max-width: 300px;
+                right: 35%;
+                bottom: 45%;
+                animation-direction: alternate;
+            }
+            &:nth-of-type(2) {
+                width: 30vw;
+                max-width: 200px;
+                right: 10%;
+                bottom: 20%;
+                animation-direction: alternate-reverse;
+            }
+            &:nth-of-type(1) {
+                width: 80vw;
+                max-width: 600px;
+                right: 50%;
+                bottom: -25%;
+                animation-direction: alternate-reverse;
+                animation-duration: 15s;
+            }
+        }
+    }
 }
 
 * {
