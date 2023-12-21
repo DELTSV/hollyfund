@@ -1,0 +1,35 @@
+@font-face {
+    font-family: "dosis";
+    src: url("dosis.ttf");
+}
+
+body {
+    background: linear-gradient(#211f69, #010121) fixed;
+    background-size: 100vw 100vh;
+    font-family: "dosis";
+}
+
+#blur {
+    background: url("noise.png");
+    background-size: 500%;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    mix-blend-mode: soft-light;
+    opacity: 0.02;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#root {
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

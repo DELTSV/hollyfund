@@ -1,6 +1,6 @@
 import {Campaign} from "../";
 import {useMemo} from "react";
-import {card} from "./CampaignCard.module.css";
+import {card} from "./style.module.css";
 
 type CampaignCardProps = {
   campaign: Campaign

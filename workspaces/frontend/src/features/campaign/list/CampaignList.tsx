@@ -1,16 +1,17 @@
 import {useContext} from "react";
 import {CampaignContext} from "../context";
 import {CampaignCard} from "../";
+import {title, list} from "./style.module.css";
 
 export const CampaignList = () => {
   const {campaigns} = useContext(CampaignContext);
 
-  if (campaigns === undefined) return <p>We are loading campaigns list</p>;
-  else if (campaigns === null) return <p>We have trouble loading campaign list</p>;
-  else if (campaigns.length === 0) return <p>We have trouble loading campaign list</p>;
+  if (campaigns === undefined) return <h2 className={title}>We are loading campaigns list</h2>;
+  else if (campaigns === null) return <h2 className={title}>We have trouble loading campaign list</h2>;
+  else if (campaigns.length === 0) return <h2 className={title}>We have trouble loading campaign list</h2>;
   return <>
-    <h2>Explore <span>{campaigns.length} projects</span></h2>
-    <ul>
+    <h2 className={title}>Explore <span>{campaigns.length} projects</span></h2>
+    <ul className={list}>
       {campaigns.map(campaign =>
         <CampaignCard
           key={campaign.title}

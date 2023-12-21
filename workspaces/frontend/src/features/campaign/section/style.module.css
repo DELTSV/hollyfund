@@ -1,0 +1,8 @@
+.section {
+    width: calc(100% - 3rem);
+    max-width: 1350px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
