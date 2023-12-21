@@ -1,2 +1,2 @@
 export * from "./campaign";
-export * from "./selectedCard";
+export * from "./selectedCampaign";

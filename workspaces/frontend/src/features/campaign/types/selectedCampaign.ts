@@ -1,6 +1,6 @@
-export type SelectedCard = {
+export type SelectedCampaign = {
   campaignTitle: string;
-  cardCenter: {
+  campaignCard?: {
     x: number;
     y: number;
   }

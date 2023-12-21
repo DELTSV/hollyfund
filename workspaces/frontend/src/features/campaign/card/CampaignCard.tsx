@@ -1,4 +1,4 @@
-import {Campaign, SelectedCard} from "../";
+import {Campaign, SelectedCampaign} from "../";
 import {createRef, useMemo} from "react";
 import {card, bar, progress} from "./style.module.css";
 import {gradientText, gradientBar} from "../../../utils";
@@ -6,15 +6,15 @@ import {gradientText, gradientBar} from "../../../utils";
 type CampaignCardProps = {
   isActive: boolean;
   campaign: Campaign;
-  onClick: (card: SelectedCard) => void;
+  onClick: (card: SelectedCampaign) => void;
 }
 
 export const CampaignCard = ({isActive, campaign, onClick}: CampaignCardProps) => {
-  const box = createRef<HTMLLIElement>()
+  const box = createRef<HTMLLIElement>();
   const [funds, target, percentage] = useMemo(() => {
     const funds = Number(campaign.totalAmount), target = Number(campaign.targetAmount);
     return [funds, target, funds/target*100]
-  }, [campaign])
+  }, [campaign]);
 
   const handleClick = () => {
     if (!box.current) return;
