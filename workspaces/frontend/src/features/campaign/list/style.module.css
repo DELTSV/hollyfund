@@ -1,22 +1,8 @@
-@keyframes backgroundAnimation {
-    from { background-position-x: 0 }
-    to { background-position-x: 200px }
-}
-
 .title{
-    background: linear-gradient(90deg, hsl(170, 100%, 88%) 0%, hsl(212, 98%, 68%) 12%, hsl(232, 100%, 67%) 47%, hsl(212, 98%, 68%) 82%, hsl(170, 100%, 88%) 100%);
-    background-size: 200px;
-    background-clip: text;
     color: white;
-    animation: 2s backgroundAnimation linear infinite;
 
     font-size: 2rem;
     font-weight: 600;
-
-    span {
-        color: transparent;
-        font-weight: 900;
-    }
 }
 
 .list {

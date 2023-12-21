@@ -1,3 +1,112 @@
+@keyframes gradientAnimation {
+    from { background-position-x: 0 }
+    to { background-position-x: 200px }
+}
 .card {
-    background: red;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    ul:not(:has(&:active)) > &:hover  {
+        margin-inline: -1rem;
+        margin-block: -0.5rem;
+    }
+
+    &:active {
+        button {
+            min-height: 0;
+            min-width: 0;
+            height: 2rem;
+            width: 2rem;
+            border-radius: 100%;
+
+            & > * {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+    }
+
+    button, button footer {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    button {
+        min-height: 100%;
+        min-width: 100%;
+        padding: 1rem;
+        border-radius: 1rem;
+        border: 2px solid rgba(166, 166, 166, 0.199);
+        background: #0000008a;
+        color: white;
+        backdrop-filter: blur(80px);
+        gap: 0.5rem;
+        cursor: pointer;
+        overflow: hidden;
+
+        transition: 0.2s;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            border-radius: 1.5rem;
+            background: url("noise.png");
+            background-size: 600%;
+            mix-blend-mode: soft-light;
+            z-index: -1;
+            opacity: 0.05;
+        }
+        
+        & > * {
+            transition: 0.1s;
+            transform-origin: left center;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-align: left;
+            
+            &::first-letter {
+                text-transform: uppercase;
+            }
+        }
+
+        footer {
+            width: 100%;
+            gap: 0.4rem;
+
+            h4 {
+                font-size: 0.8rem;
+                color: rgb(202, 202, 202);
+            }
+
+            h5 {
+                font-size: 0.6rem;
+            }
+
+            #bar {
+                background: rgba(166, 166, 166, 0.199);
+                width: 100%;
+                height: 0.8rem;
+                border-radius: 0.4rem;
+                position: relative;
+                overflow: hidden;
+
+                #progress {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                }
+            }
+        }
+    }
 }
