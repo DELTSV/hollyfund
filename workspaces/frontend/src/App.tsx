@@ -1,5 +1,3 @@
 import {CampaignSection} from "./features/campaign";
 
-export const App = () => {
-  return <CampaignSection/>;
-}
+export const App = () => <CampaignSection/>;

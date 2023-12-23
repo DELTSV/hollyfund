@@ -56,9 +56,8 @@ export const CampaignContextWrapper = ({children}: Props) => {
   const unselectCampaign = () => setSelectedCampaign(undefined);
 
   useEffect(() => {
-    if (contract && account && campaigns === undefined) {
-      updateCampaignsList()
-    }
+    if (contract && account && campaigns === undefined) updateCampaignsList()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contract, account]);
 
   return <CampaignContext.Provider value={{
