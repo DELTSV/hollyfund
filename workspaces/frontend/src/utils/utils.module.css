@@ -18,7 +18,7 @@
 }
 
 .gradientBar {
-  background: linear-gradient(90deg, hsl(154, 100%, 75%) 0%, hsl(212, 98%, 68%) 12%, hsl(232, 100%, 67%) 47%, hsl(212, 98%, 68%) 82%, hsl(154, 100%, 75%) 100%);
+  background: linear-gradient(90deg, hsl(154, 100%, 75%), hsl(212, 98%, 68%), hsl(232, 85%, 57%), hsl(212, 98%, 68%), hsl(154, 100%, 75%), hsl(212, 98%, 68%), hsl(232, 85%, 57%), hsl(212, 98%, 68%), hsl(154, 100%, 75%));
   background-size: 400px;
   animation: 2s gradientBarAnimation linear infinite;
 }

@@ -1,0 +1,57 @@
+.progression, .bar {
+  width: 100%;
+}
+
+.progression {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+
+  h5 {
+    font-size: 0.6rem;
+  }
+}
+
+.bar {
+  width: 100%;
+  height: 0.8rem;
+  position: relative;
+
+  & > :nth-child(1) {
+    --overflow: 6px;
+
+    --position-offset: calc(var(--overflow) / -2);
+    position: absolute;
+    top: var(--position-offset);
+    left: var(--position-offset);
+
+    --size-with-offset: calc(100% + var(--overflow));
+    height: var(--size-with-offset);
+    width: var(--size-with-offset);
+    border-radius: calc(0.4rem + var(--overflow) / 2);
+
+    overflow: clip;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    filter: blur(8px) contrast(2);
+  }
+
+  & > :nth-child(2) {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    height: 100%;
+    width: 100%;
+    border-radius: 0.4rem;
+
+    overflow: clip;
+    background: rgba(67, 67, 67, 0.584);
+
+    & > div {
+      height: 100%;
+    }
+  }
+}

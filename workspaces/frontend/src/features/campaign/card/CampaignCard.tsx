@@ -1,4 +1,4 @@
-import {Campaign, SelectedCampaign} from "../";
+import {Campaign, CampaignProgressBar, SelectedCampaign} from "../";
 import {createRef, useMemo} from "react";
 import style from "./style.module.css";
 import { style as utilsStyle } from "../../../utils";
@@ -30,15 +30,12 @@ export const CampaignCard = ({isActive, campaign, onClick}: Props) => {
   };
 
   return <li className={style.card} onClick={handleClick} ref={box}>
-    { !isActive && <button>
+    {!isActive && <button>
       <h3>{campaign.title}</h3>
       <footer>
         <h4><span className={utilsStyle.gradientText}>{funds}</span> / {target} ETH raised</h4>
-        <div id={style.bar}>
-          <div id={style.progress} className={utilsStyle.gradientBar} style={{width: `${percentage}%`}}></div>
-        </div>
-        <h5 className={utilsStyle.gradientText}>{percentage}% funded</h5>
+        <CampaignProgressBar progressionPercentage={percentage}/>
       </footer>
-    </button> }
+    </button>}
   </li>;
 }
