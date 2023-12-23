@@ -1,8 +1,8 @@
 import {CampaignList, CampaignContextWrapper, CampaignDetails} from "../";
-import {section} from "./style.module.css"
+import style from "./style.module.css"
 
 export const CampaignSection = () => {
-  return <section className={section}>
+  return <section className={style.section}>
     <CampaignContextWrapper>
       <CampaignList/>
       <CampaignDetails/>

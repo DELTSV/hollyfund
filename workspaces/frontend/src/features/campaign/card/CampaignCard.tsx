@@ -1,15 +1,15 @@
 import {Campaign, SelectedCampaign} from "../";
 import {createRef, useMemo} from "react";
-import {card, bar, progress} from "./style.module.css";
-import {gradientText, gradientBar} from "../../../utils";
+import style from "./style.module.css";
+import { style as utilsStyle } from "../../../utils";
 
-type CampaignCardProps = {
+type Props = {
   isActive: boolean;
   campaign: Campaign;
   onClick: (card: SelectedCampaign) => void;
 }
 
-export const CampaignCard = ({isActive, campaign, onClick}: CampaignCardProps) => {
+export const CampaignCard = ({isActive, campaign, onClick}: Props) => {
   const box = createRef<HTMLLIElement>();
   const [funds, target, percentage] = useMemo(() => {
     const funds = Number(campaign.totalAmount), target = Number(campaign.targetAmount);
@@ -29,15 +29,15 @@ export const CampaignCard = ({isActive, campaign, onClick}: CampaignCardProps) =
     })
   };
 
-  return <li className={card} onClick={handleClick} ref={box}>
+  return <li className={style.card} onClick={handleClick} ref={box}>
     { !isActive && <button>
       <h3>{campaign.title}</h3>
       <footer>
-        <h4><span className={gradientText}>{funds}</span> / {target} ETH raised</h4>
-        <div id={bar}>
-          <div id={progress} className={gradientBar} style={{width: `${percentage}%`}}></div>
+        <h4><span className={utilsStyle.gradientText}>{funds}</span> / {target} ETH raised</h4>
+        <div id={style.bar}>
+          <div id={style.progress} className={utilsStyle.gradientBar} style={{width: `${percentage}%`}}></div>
         </div>
-        <h5 className={gradientText}>{percentage}% funded</h5>
+        <h5 className={utilsStyle.gradientText}>{percentage}% funded</h5>
       </footer>
     </button> }
   </li>;

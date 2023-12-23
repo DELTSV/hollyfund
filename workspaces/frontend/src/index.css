@@ -86,7 +86,7 @@ p,h1,h2,h3,h4,h5,h6 {
         position: absolute;
         height: 100%;
         width: 100%;
-        filter: blur(30px) contrast(120) blur(70px) contrast(20) blur(60px);
+        filter: blur(30px) contrast(120) blur(70px) contrast(20) blur(120px);
         mix-blend-mode: hard-light;
         opacity: 0.6;
 

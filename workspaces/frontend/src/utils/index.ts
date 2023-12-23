@@ -1,1 +1,3 @@
-export * from "./utils.module.css"
+import style from "./utils.module.css";
+
+export {style};
