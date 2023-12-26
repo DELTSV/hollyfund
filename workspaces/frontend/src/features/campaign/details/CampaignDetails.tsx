@@ -1,10 +1,11 @@
 import { useContext } from "react";
-import { CampaignContext } from "..";
+import { CampaignContext, CampaignProgressBar } from "..";
 import style from "./style.module.css";
 import { CampaignDetailsAnimation } from "./CampaignDetailsAnimation";
 
 export const CampaignDetails = () => {
-  const {selectedCampaign, unselectCampaign} = useContext(CampaignContext);
+  const {selectedCampaign, unselectCampaign, getCampaign} = useContext(CampaignContext);
+  const campaign = getCampaign?.(selectedCampaign?.campaignTitle ?? "");
 
   if (!selectedCampaign) return null;
   return <>
@@ -13,10 +14,10 @@ export const CampaignDetails = () => {
       <article onClick={e => e.stopPropagation()}>
         <header>
           <h1>{selectedCampaign.campaignTitle}</h1>
+          <CampaignProgressBar campaign={campaign} big/>
         </header>
         <section>
-          <h1>{selectedCampaign.campaignTitle}</h1>
-          <h1>{selectedCampaign.campaignTitle}</h1>
+          {/* add description later */}
         </section>
       </article>
     </dialog>

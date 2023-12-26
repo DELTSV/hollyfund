@@ -1,4 +1,4 @@
-import {createContext, ReactNode, useEffect, useMemo, useState} from "react";
+import {createContext, ReactNode, useCallback, useEffect, useMemo, useState} from "react";
 import {Campaign, SelectedCampaign} from "../types";
 import {useSDK} from "@metamask/sdk-react";
 import {Web3} from "web3";
@@ -11,6 +11,7 @@ export type CampaignContextType = {
   selectedCampaign?: SelectedCampaign,
   selectCampaign?: (campaign: SelectedCampaign) => void,
   unselectCampaign?: () => void,
+  getCampaign?: (title: string) => Campaign | undefined
 }
 
 export const CampaignContext = createContext<CampaignContextType>({});
@@ -54,6 +55,7 @@ export const CampaignContextWrapper = ({children}: Props) => {
 
   const selectCampaign = (campaign: SelectedCampaign) => setSelectedCampaign(campaign);
   const unselectCampaign = () => setSelectedCampaign(undefined);
+  const getCampaign = useCallback((title: string) => campaigns?.find(campaign => campaign.title === title), [campaigns]);
 
   useEffect(() => {
     if (contract && account && campaigns === undefined) updateCampaignsList()
@@ -65,6 +67,7 @@ export const CampaignContextWrapper = ({children}: Props) => {
     selectedCampaign,
     selectCampaign,
     unselectCampaign,
+    getCampaign,
   }}>
     {children}
   </CampaignContext.Provider>;

@@ -37,7 +37,7 @@
   transition: 0.2s;
 
   &:active {
-    background: #00000000;
+    background: transparent;
     backdrop-filter: blur(0);
 
     article > * {
@@ -85,6 +85,24 @@
       mix-blend-mode: soft-light;
       z-index: -1;
       opacity: 0.05;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      h1 {
+        font-size: 1.5rem;
+
+        &::first-letter {
+          text-transform: uppercase;
+        }
+      }
+      
+      h4 {
+        font-size: 0.8rem;
+      }
     }
 
     section {
