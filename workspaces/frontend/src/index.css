@@ -3,10 +3,6 @@
     src: url("dosis.ttf");
 }
 
-p,h1,h2,h3,h4,h5,h6 {
-    font-family: "dosis";
-}
-
 @keyframes blink {
     from {
         transform: scale(0.6) translate(-10%, 20%);
@@ -32,7 +28,7 @@ p,h1,h2,h3,h4,h5,h6 {
         height: 100%;
         width: 100%;
         mix-blend-mode: soft-light;
-        opacity: 0.5;
+        opacity: 0.3;
 
         & > div {
             position: absolute;
@@ -87,8 +83,7 @@ p,h1,h2,h3,h4,h5,h6 {
         height: 100%;
         width: 100%;
         filter: blur(30px) contrast(120) blur(70px) contrast(20) blur(120px);
-        mix-blend-mode: hard-light;
-        opacity: 0.6;
+        opacity: 0.5;
 
         & > div {
             background: radial-gradient(#56ffe8 50%, #000000, #100288 55%);
@@ -126,6 +121,7 @@ p,h1,h2,h3,h4,h5,h6 {
 * {
     margin: 0;
     padding: 0;
+    font-family: "dosis";
 }
 
 #root {

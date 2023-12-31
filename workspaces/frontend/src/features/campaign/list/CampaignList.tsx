@@ -2,7 +2,7 @@ import {useContext} from "react";
 import {CampaignContext} from "../context";
 import {CampaignCard} from "../";
 import style from "./style.module.css";
-import {style as utilsStyle} from "../../../utils"
+import {utilsStyle} from "../../../utils"
 
 export const CampaignList = () => {
   const {campaigns, selectedCampaign, selectCampaign} = useContext(CampaignContext);

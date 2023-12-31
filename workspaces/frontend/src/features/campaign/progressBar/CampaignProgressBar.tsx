@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import style from "./style.module.css";
-import { style as utilsStyle } from "../../../utils";
+import { utilsStyle } from "../../../utils";
 import { Campaign, useCampaignFundStats } from "..";
 
 type Props = {

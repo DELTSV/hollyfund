@@ -1,25 +1,40 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CampaignContext, CampaignProgressBar } from "..";
-import style from "./style.module.css";
-import { CampaignDetailsAnimation } from "./CampaignDetailsAnimation";
+import { Web3Context } from "../../web3";
+import { utilsStyle } from "../../../utils";
+import { Dialog, dialogStyle } from "../../dialog";
 
 export const CampaignDetails = () => {
   const {selectedCampaign, unselectCampaign, getCampaign} = useContext(CampaignContext);
   const campaign = getCampaign?.(selectedCampaign?.campaignTitle ?? "");
+  const {updateBalance} = useContext(Web3Context);
+  const [shouldClose, setShouldClose] = useState(false);
 
-  if (!selectedCampaign) return null;
-  return <>
-    <CampaignDetailsAnimation x={selectedCampaign.campaignCard?.x} y={selectedCampaign.campaignCard?.y}/>
-    <dialog className={style.details} onClick={unselectCampaign} open>
-      <article onClick={e => e.stopPropagation()}>
-        <header>
-          <h1>{selectedCampaign.campaignTitle}</h1>
-          <CampaignProgressBar campaign={campaign} big/>
-        </header>
-        <section>
-          {/* add description later */}
-        </section>
-      </article>
-    </dialog>
-  </>;
+  useEffect(() => {
+    if (!updateBalance || !selectedCampaign) return;
+    updateBalance();
+  }, [selectedCampaign, updateBalance])
+
+  return <Dialog
+    onClose={() => {
+      unselectCampaign?.();
+      setShouldClose(false);
+    }}
+    open={!!selectedCampaign}
+    shouldClose={shouldClose}
+    poppingOrigin={{
+      x: selectedCampaign?.campaignCard?.x ?? 0,
+      y: selectedCampaign?.campaignCard?.y ?? 0,
+    }}
+  >
+    <section>
+      <h1>{selectedCampaign?.campaignTitle}</h1>
+      <CampaignProgressBar campaign={campaign} big/>
+    </section>
+    <section>
+      <h2>Contribute</h2>
+      <p>Support this cinematic journey and unlock potential royalties. Your commitment is key—no turning back once you pledge. Join us in making movie magic!</p>
+      <button className={`${utilsStyle.gradientButton} ${dialogStyle.primary}`} onClick={() => setShouldClose(true)}>Back this project</button>
+    </section>
+  </Dialog>
 }

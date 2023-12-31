@@ -1,3 +1,3 @@
-import style from "./utils.module.css";
+import utilsStyle from "./utils.module.css";
 
-export {style};
+export {utilsStyle}
