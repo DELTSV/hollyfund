@@ -2,7 +2,7 @@ import {useContext} from "react";
 import {CampaignContext} from "../context";
 import {CampaignCard} from "../";
 import style from "./style.module.css";
-import {utilsStyle} from "../../../utils"
+import {gradientStyle} from "../../../components/styles"
 
 export const CampaignList = () => {
   const {campaigns, selectedCampaign, selectCampaign} = useContext(CampaignContext);
@@ -11,7 +11,7 @@ export const CampaignList = () => {
   else if (campaigns === null) return <h2 className={style.title}>We have trouble loading campaign list</h2>;
   else if (campaigns.length === 0) return <h2 className={style.title}>We have trouble loading campaign list</h2>;
   return <>
-    <h2 className={style.title}>Explore <span className={utilsStyle.gradientText}>{campaigns.length} projects</span></h2>
+    <h2 className={style.title}>Explore <span className={gradientStyle.text}>{campaigns.length} projects</span></h2>
     <ul className={style.list}>
       {campaigns.map(campaign =>
         <CampaignCard

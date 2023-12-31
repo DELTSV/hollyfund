@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import style from "./style.module.css";
-import { utilsStyle } from "../../../utils";
+import { gradientStyle } from "../../../components/styles";
 import { Campaign, useCampaignFundStats } from "..";
 
 type Props = {
@@ -16,16 +16,16 @@ export const CampaignProgressBar = ({campaign, big}: Props) => {
   );
 
   return <section className={style.progression}>
-    <h4><span className={utilsStyle.gradientText}>{funds}</span> / {target} ETH raised</h4>
+    <h4><span className={gradientStyle.text}>{funds}</span> / {target} ETH raised</h4>
     <div className={style.bar}>
-      <div className={utilsStyle.gradientBar} style={{opacity: lightOpacity}}></div>
+      <div className={gradientStyle.bar} style={{opacity: lightOpacity}}></div>
       <div>
-        <div className={utilsStyle.gradientBar} style={{width: `${percentage}%`}}></div>
+        <div className={gradientStyle.bar} style={{width: `${percentage}%`}}></div>
       </div>
     </div>
     { big ? 
-      <h4 className={utilsStyle.gradientText}>{percentage}% funded</h4> :
-      <h5 className={utilsStyle.gradientText}>{percentage}% funded</h5>
+      <h4 className={gradientStyle.text}>{percentage}% funded</h4> :
+      <h5 className={gradientStyle.text}>{percentage}% funded</h5>
     }
   </section>;
 }

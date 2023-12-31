@@ -2,7 +2,7 @@ import { ChangeEvent, useMemo, useContext, useState } from "react";
 import { Web3Context } from "../../web3";
 import { Web3 } from "web3";
 import style from "./style.module.css";
-import { utilsStyle } from "../../../utils";
+import { gradientStyle } from "../../../components/styles";
 
 export const CampaignInvest = () => {
   const {balance} = useContext(Web3Context);
@@ -19,7 +19,7 @@ export const CampaignInvest = () => {
 
   return <section className={style.invest}>
     <div className={style.slider}>
-      <label>{formattedInvestment}<span className={utilsStyle.gradientText}>eth</span></label>
+      <label>{formattedInvestment}<span className={gradientStyle.text}>eth</span></label>
       <input
         type="range"
         min={0}
@@ -27,7 +27,7 @@ export const CampaignInvest = () => {
         value={investment}
         onChange={handleInvestmentChange}
       />
-      <label>{formattedBalance}<span className={utilsStyle.gradientText}>eth</span></label>
+      <label>{formattedBalance}<span className={gradientStyle.text}>eth</span></label>
     </div>
     <button>Commit Funds</button>
   </section>;

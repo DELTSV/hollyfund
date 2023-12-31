@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { CampaignContext, CampaignProgressBar } from "..";
 import { Web3Context } from "../../web3";
-import { utilsStyle } from "../../../utils";
-import { Dialog, dialogStyle } from "../../dialog";
+import { gradientStyle } from "../../../components/styles";
+import { Dialog, dialogStyle } from "../../../components/dialog";
 
 export const CampaignDetails = () => {
   const {selectedCampaign, unselectCampaign, getCampaign} = useContext(CampaignContext);
@@ -34,7 +34,7 @@ export const CampaignDetails = () => {
     <section>
       <h2>Contribute</h2>
       <p>Support this cinematic journey and unlock potential royalties. Your commitment is key—no turning back once you pledge. Join us in making movie magic!</p>
-      <button className={`${utilsStyle.gradientButton} ${dialogStyle.primary}`} onClick={() => setShouldClose(true)}>Back this project</button>
+      <button className={`${gradientStyle.button} ${dialogStyle.primary}`} onClick={() => setShouldClose(true)}>Back this project</button>
     </section>
   </Dialog>
 }
