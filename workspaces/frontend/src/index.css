@@ -15,6 +15,15 @@
     }
 }
 
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 #background {
     position: fixed;
     height: 100%;
@@ -28,7 +37,7 @@
         height: 100%;
         width: 100%;
         mix-blend-mode: soft-light;
-        opacity: 0.3;
+        opacity: 0.5;
 
         & > div {
             position: absolute;
@@ -83,7 +92,7 @@
         height: 100%;
         width: 100%;
         filter: blur(30px) contrast(120) blur(70px) contrast(20) blur(120px);
-        opacity: 0.5;
+        animation: appear 10s ease-in-out;
 
         & > div {
             background: radial-gradient(#56ffe8 50%, #000000, #100288 55%);
@@ -122,6 +131,25 @@
     margin: 0;
     padding: 0;
     font-family: "dosis";
+
+    &::-webkit-scrollbar {
+        width: 0.8rem;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgb(38, 38, 38);
+        border-radius: 1rem;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.801);
+        border-radius: 1rem;
+    }
+
+    &::-webkit-scrollbar-button {
+        height: 1rem;
+        background: transparent;
+    }
 }
 
 #root {

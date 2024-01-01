@@ -26,6 +26,7 @@ export const DialogAnimation = ({x,y}: Props) => {
       to {
         top: 50%;
         left: 50%;
+        overflow: hidden;
       }
     }
 

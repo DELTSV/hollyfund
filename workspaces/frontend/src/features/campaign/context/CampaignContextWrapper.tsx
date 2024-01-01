@@ -2,6 +2,7 @@ import {createContext, ReactNode, useCallback, useContext, useEffect, useMemo, u
 import {Campaign, SelectedCampaign} from "../types";
 import {Web3Context} from "../../web3";
 import {campaignContractAbi, contractAddress} from "./index.ts";
+import {Web3} from "web3";
 
 type ContextCampaignsList = Campaign[] | undefined | null;
 
@@ -13,6 +14,7 @@ export type CampaignContextType = {
   getCampaign?: (title: string) => Campaign | undefined,
   setCampaignToInvest?: (campaignName: string) => void,
   campaignToInvest?: string,
+  createCampaign?: (campaignName: string, campaignTargetInETH: string) => void,
   invest?: (value: string) => void,
   cancelInvestment?: () => void,
   retrieveCampaignInvestment?: (campaignName: string) => void,
@@ -55,10 +57,13 @@ export const CampaignContextWrapper = ({children}: Props) => {
   const unselectCampaign = () => setSelectedCampaign(undefined);
   const getCampaign = useCallback((title: string) => campaigns?.find(campaign => campaign.title === title), [campaigns]);
 
+  const createCampaign = (campaignName: string, campaignTargetInETH: string) => {
+    if (!contract || !userAddress) return;
+    contract.methods.createCampaign(campaignName, Web3.utils.toWei(campaignTargetInETH, "ether")).send({ from: userAddress }).on("confirmation", updateCampaignsList);
+  };
   const cancelInvestment = () => setCampaignToInvest(undefined);
-  const invest = async (value: string) => {
+  const invest = (value: string) => {
     if (!campaignToInvest || !contract || !userAddress) return;
-    
     contract.methods.approve(contractAddress, value).send({ from: userAddress });
     contract.methods.invest(campaignToInvest).send({ from: userAddress, value: value }).on("confirmation", updateCampaignsList);
   };
@@ -76,6 +81,7 @@ export const CampaignContextWrapper = ({children}: Props) => {
     getCampaign,
     setCampaignToInvest,
     campaignToInvest,
+    createCampaign,
     invest,
     cancelInvestment,
     retrieveCampaignInvestment

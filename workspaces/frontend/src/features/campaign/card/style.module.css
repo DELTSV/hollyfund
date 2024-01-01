@@ -66,7 +66,6 @@
         backdrop-filter: blur(80px);
         gap: 1rem;
         cursor: pointer;
-        overflow: hidden;
         animation: unzoom 0.2s;
         transition: 0.2s;
         justify-content: center;
@@ -102,4 +101,14 @@
             }
         }
     }
+}
+
+.possessionTag {
+    color: black;
+    border-radius: 2rem;
+    padding-block: 0.3rem;
+    padding-inline: 0.6rem;
+    position: absolute;
+    bottom: 90%;
+    left: 0;
 }
