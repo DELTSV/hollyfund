@@ -36,6 +36,7 @@
   cursor: pointer;
   animation: blur 0.3s;
   transition: 0.2s;
+  transition-property: background, backdrop-filter;
   z-index: 2000000000;
 
   &.closing {
@@ -96,6 +97,7 @@
 
       &.horizontal {
         flex-direction: row;
+        flex-wrap: wrap;
       }
 
       h1 {

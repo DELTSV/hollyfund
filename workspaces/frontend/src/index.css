@@ -131,6 +131,25 @@
     margin: 0;
     padding: 0;
     font-family: "dosis";
+
+    &::-webkit-scrollbar {
+        width: 0.8rem;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgb(38, 38, 38);
+        border-radius: 1rem;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.801);
+        border-radius: 1rem;
+    }
+
+    &::-webkit-scrollbar-button {
+        height: 1rem;
+        background: transparent;
+    }
 }
 
 #root {
