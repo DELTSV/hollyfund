@@ -1,13 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { CampaignContext, CampaignProgressBar } from "..";
 import { Web3Context } from "../../web3";
-import { gradientStyle } from "../../../components/styles";
-import { Dialog, dialogStyle } from "../../../components/dialog";
+import { Dialog } from "../../../components/dialog";
+import { CampaignDetailsContribution } from "./CampaignDetailsContribution";
+import { CampaignDetailsClaiming } from "./CampaignDetailsClaiming";
 
 export const CampaignDetails = () => {
-  const {selectedCampaign, unselectCampaign, getCampaign} = useContext(CampaignContext);
+  const {selectedCampaign, unselectCampaign, getCampaign, setCampaignToInvest, retrieveCampaignInvestment} = useContext(CampaignContext);
   const campaign = getCampaign?.(selectedCampaign?.campaignTitle ?? "");
-  const {updateBalance} = useContext(Web3Context);
+  const {updateBalance, userAddress} = useContext(Web3Context);
   const [shouldClose, setShouldClose] = useState(false);
 
   useEffect(() => {
@@ -15,11 +16,25 @@ export const CampaignDetails = () => {
     updateBalance();
   }, [selectedCampaign, updateBalance])
 
+  const closeDialog = () => {
+    unselectCampaign?.();
+    setShouldClose(false);
+  }
+
+  const handleInvestmentButtonClick = () => {
+    if (!selectedCampaign) return;
+    setCampaignToInvest?.(selectedCampaign.campaignTitle);
+    setShouldClose(true);
+  }
+  
+  const handleClaimButtonClick = () => {
+    if (!campaign) return;
+    retrieveCampaignInvestment?.(campaign.title);
+    setShouldClose(true);
+  }
+
   return <Dialog
-    onClose={() => {
-      unselectCampaign?.();
-      setShouldClose(false);
-    }}
+    onClose={closeDialog}
     open={!!selectedCampaign}
     shouldClose={shouldClose}
     poppingOrigin={{
@@ -28,13 +43,12 @@ export const CampaignDetails = () => {
     }}
   >
     <section>
-      <h1>{selectedCampaign?.campaignTitle}</h1>
+      <h1>{campaign?.title}</h1>
       <CampaignProgressBar campaign={campaign} big/>
     </section>
-    <section>
-      <h2>Contribute</h2>
-      <p>Support this cinematic journey and unlock potential royalties. Your commitment is key—no turning back once you pledge. Join us in making movie magic!</p>
-      <button className={`${gradientStyle.button} ${dialogStyle.primary}`} onClick={() => setShouldClose(true)}>Back this project</button>
-    </section>
-  </Dialog>
+    { userAddress?.toLowerCase() !== campaign?.producer.toLowerCase() ?
+      <CampaignDetailsContribution onInvestmentClick={handleInvestmentButtonClick}/> :
+      <CampaignDetailsClaiming onClaimClick={handleClaimButtonClick}  funds={campaign?.totalAmount ?? 0} target={campaign?.targetAmount ?? 0}/>
+    }
+  </Dialog>;
 }

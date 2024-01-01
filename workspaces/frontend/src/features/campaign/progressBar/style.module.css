@@ -18,7 +18,7 @@
   position: relative;
 
   & > :nth-child(1) {
-    --overflow: 6px;
+    --overflow: 16px;
 
     --position-offset: calc(var(--overflow) / -2);
     position: absolute;
@@ -34,7 +34,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    filter: blur(8px) contrast(2);
+    filter: blur(8px) opacity(0.8);
   }
 
   & > :nth-child(2) {

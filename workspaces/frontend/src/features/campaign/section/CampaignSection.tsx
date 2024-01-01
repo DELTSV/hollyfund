@@ -1,4 +1,4 @@
-import {CampaignList, CampaignContextWrapper, CampaignDetails} from "../";
+import {CampaignList, CampaignContextWrapper, CampaignDetails, CampaignInvest} from "../";
 import style from "./style.module.css"
 
 export const CampaignSection = () => 
@@ -6,5 +6,6 @@ export const CampaignSection = () =>
     <CampaignContextWrapper>
       <CampaignList/>
       <CampaignDetails/>
+      <CampaignInvest/>
     </CampaignContextWrapper>
   </section>;

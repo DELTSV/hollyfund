@@ -2,8 +2,8 @@ import { useMemo } from "react";
 import style from "./style.module.css";
 
 type Props = {
-  x: number;
-  y: number;
+  x?: number;
+  y?: number;
 }
 
 export const DialogAnimation = ({x,y}: Props) => {

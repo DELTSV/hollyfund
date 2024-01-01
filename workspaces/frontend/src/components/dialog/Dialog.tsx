@@ -7,7 +7,7 @@ type Props = {
   open: boolean;
   shouldClose: boolean;
   onClose: () => void;
-  poppingOrigin: {
+  poppingOrigin?: {
     x: number;
     y: number;
   }
@@ -34,7 +34,7 @@ export const Dialog = ({children, open, shouldClose, onClose, poppingOrigin}: Pr
   if(!open) return null;
 
   return <>
-    <DialogAnimation x={poppingOrigin.x} y={poppingOrigin.y}/>
+    <DialogAnimation x={poppingOrigin?.x} y={poppingOrigin?.y}/>
     <dialog className={className} onClick={handleClose} open>
       <article onClick={e => e.stopPropagation()}>
         {children}

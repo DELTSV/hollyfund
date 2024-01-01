@@ -1,7 +1,7 @@
 import {createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState} from "react";
 import {Campaign, SelectedCampaign} from "../types";
 import {Web3Context} from "../../web3";
-import {campaignContractAbi} from "./index.ts";
+import {campaignContractAbi, contractAddress} from "./index.ts";
 
 type ContextCampaignsList = Campaign[] | undefined | null;
 
@@ -10,7 +10,12 @@ export type CampaignContextType = {
   selectedCampaign?: SelectedCampaign,
   selectCampaign?: (campaign: SelectedCampaign) => void,
   unselectCampaign?: () => void,
-  getCampaign?: (title: string) => Campaign | undefined
+  getCampaign?: (title: string) => Campaign | undefined,
+  setCampaignToInvest?: (campaignName: string) => void,
+  campaignToInvest?: string,
+  invest?: (value: string) => void,
+  cancelInvestment?: () => void,
+  retrieveCampaignInvestment?: (campaignName: string) => void,
 }
 
 export const CampaignContext = createContext<CampaignContextType>({});
@@ -23,10 +28,11 @@ export const CampaignContextWrapper = ({children}: Props) => {
   const {web3, userAddress} = useContext(Web3Context)
   const [campaigns, setCampaigns] = useState<ContextCampaignsList>(undefined);
   const [selectedCampaign, setSelectedCampaign] = useState<SelectedCampaign | undefined>()
+  const [campaignToInvest, setCampaignToInvest] = useState<string | undefined>()
 
   const contract = useMemo(
     () => web3? 
-      new web3.eth.Contract(campaignContractAbi, "0xBcCC4e83B0F5AdC3DED5eB392b022225E3450557", {gas: "3000000"}) :
+      new web3.eth.Contract(campaignContractAbi, contractAddress, {gas: "3000000"}) :
       undefined,
     [web3]
   );
@@ -40,14 +46,27 @@ export const CampaignContextWrapper = ({children}: Props) => {
     )
   }
 
-  const selectCampaign = (campaign: SelectedCampaign) => setSelectedCampaign(campaign);
-  const unselectCampaign = () => setSelectedCampaign(undefined);
-  const getCampaign = useCallback((title: string) => campaigns?.find(campaign => campaign.title === title), [campaigns]);
-
   useEffect(() => {
     if (contract && userAddress && campaigns === undefined) updateCampaignsList()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contract, userAddress]);
+
+  const selectCampaign = (campaign: SelectedCampaign) => setSelectedCampaign(campaign);
+  const unselectCampaign = () => setSelectedCampaign(undefined);
+  const getCampaign = useCallback((title: string) => campaigns?.find(campaign => campaign.title === title), [campaigns]);
+
+  const cancelInvestment = () => setCampaignToInvest(undefined);
+  const invest = async (value: string) => {
+    if (!campaignToInvest || !contract || !userAddress) return;
+    
+    contract.methods.approve(contractAddress, value).send({ from: userAddress });
+    contract.methods.invest(campaignToInvest).send({ from: userAddress, value: value }).on("confirmation", updateCampaignsList);
+  };
+  const retrieveCampaignInvestment = (campaignName: string) => {
+    if (!contract || !userAddress) return;
+    contract.methods.claim(campaignName).send({ from: userAddress });
+  }
+
 
   return <CampaignContext.Provider value={{
     campaigns,
@@ -55,6 +74,11 @@ export const CampaignContextWrapper = ({children}: Props) => {
     selectCampaign,
     unselectCampaign,
     getCampaign,
+    setCampaignToInvest,
+    campaignToInvest,
+    invest,
+    cancelInvestment,
+    retrieveCampaignInvestment
   }}>
     {children}
   </CampaignContext.Provider>;
