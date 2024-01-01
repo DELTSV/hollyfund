@@ -1,54 +1,54 @@
-import { useContext } from "react";
-import { CampaignContext } from "..";
-import { details } from "./style.module.css";
+import { useContext, useEffect, useState } from "react";
+import { CampaignContext, CampaignProgressBar } from "..";
+import { Web3Context } from "../../web3";
+import { Dialog } from "../../../components/dialog";
+import { CampaignDetailsContribution } from "./CampaignDetailsContribution";
+import { CampaignDetailsClaiming } from "./CampaignDetailsClaiming";
 
 export const CampaignDetails = () => {
-  const {selectedCampaign, unselectCampaign} = useContext(CampaignContext);
+  const {selectedCampaign, unselectCampaign, getCampaign, setCampaignToInvest, retrieveCampaignInvestment} = useContext(CampaignContext);
+  const campaign = getCampaign?.(selectedCampaign?.campaignTitle ?? "");
+  const {updateBalance, userAddress} = useContext(Web3Context);
+  const [shouldClose, setShouldClose] = useState(false);
 
-  if (!selectedCampaign) return null;
-  return <>
-    <style>{`
-      @keyframes unzoom {
-        from {
-          top: ${selectedCampaign.campaignCard?.y}px;
-          left: ${selectedCampaign.campaignCard?.x}px;
-          max-width: 2rem;
-          max-height: 2rem;
-          border-radius: 100%;
-          padding: 0;
-          overflow: hidden;
-        }
-        to {
-          top: 50%;
-          left: 50%;
-        }
-      }
+  useEffect(() => {
+    if (!updateBalance || !selectedCampaign) return;
+    updateBalance();
+  }, [selectedCampaign, updateBalance])
 
-      .${details} article {
-        animation: unzoom 0.3s;
-        transition: 0.2s
-      }
+  const closeDialog = () => {
+    unselectCampaign?.();
+    setShouldClose(false);
+  }
 
-      .${details}:active article {
-        top: ${selectedCampaign.campaignCard?.y}px;
-        left: ${selectedCampaign.campaignCard?.x}px;
-        max-width: 2rem;
-        max-height: 2rem;
-        border-radius: 100%;
-        padding: 0;
-        overflow: hidden;
-      }
-    `}</style>
-    <dialog className={details} onClick={unselectCampaign} open>
-      <article onClick={e => e.stopPropagation()}>
-        <header>
-          <h1>{selectedCampaign.campaignTitle}</h1>
-        </header>
-        <section>
-          <h1>{selectedCampaign.campaignTitle}</h1>
-          <h1>{selectedCampaign.campaignTitle}</h1>
-        </section>
-      </article>
-    </dialog>
-  </>;
+  const handleInvestmentButtonClick = () => {
+    if (!selectedCampaign) return;
+    setCampaignToInvest?.(selectedCampaign.campaignTitle);
+    setShouldClose(true);
+  }
+  
+  const handleClaimButtonClick = () => {
+    if (!campaign) return;
+    retrieveCampaignInvestment?.(campaign.title);
+    setShouldClose(true);
+  }
+
+  return <Dialog
+    onClose={closeDialog}
+    open={!!selectedCampaign}
+    shouldClose={shouldClose}
+    poppingOrigin={{
+      x: selectedCampaign?.campaignCard?.x ?? 0,
+      y: selectedCampaign?.campaignCard?.y ?? 0,
+    }}
+  >
+    <section>
+      <h1>{campaign?.title}</h1>
+      <CampaignProgressBar campaign={campaign} big/>
+    </section>
+    { userAddress?.toLowerCase() !== campaign?.producer.toLowerCase() ?
+      <CampaignDetailsContribution onInvestmentClick={handleInvestmentButtonClick}/> :
+      <CampaignDetailsClaiming onClaimClick={handleClaimButtonClick}  funds={campaign?.totalAmount ?? 0} target={campaign?.targetAmount ?? 0}/>
+    }
+  </Dialog>;
 }

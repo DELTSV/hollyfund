@@ -1,11 +1,11 @@
-import {CampaignList, CampaignContextWrapper, CampaignDetails} from "../";
-import {section} from "./style.module.css"
+import {CampaignList, CampaignContextWrapper, CampaignDetails, CampaignInvest} from "../";
+import style from "./style.module.css"
 
-export const CampaignSection = () => {
-  return <section className={section}>
+export const CampaignSection = () => 
+  <section className={style.section}>
     <CampaignContextWrapper>
       <CampaignList/>
       <CampaignDetails/>
+      <CampaignInvest/>
     </CampaignContextWrapper>
   </section>;
-}

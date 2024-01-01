@@ -1,0 +1,26 @@
+.slider {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+
+  label {
+    font-size: 1rem;
+    min-width: 3rem;
+    font-weight: 400;
+    position: relative;
+    text-align: center;
+
+    span{
+      position: absolute;
+      top: 70%;
+      left: 80%;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      font-weight: 900;
+    }
+  }
+
+  input[type="range"] {
+    width: 100%;
+  }
+}

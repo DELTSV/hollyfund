@@ -1,0 +1,60 @@
+@keyframes textAnimation {
+  from { background-position-x: 0 }
+  to { background-position-x: 200px }
+}
+
+.text {
+  color: transparent;
+  background: linear-gradient(90deg, hsl(154, 100%, 60%) 0%, hsl(212, 98%, 68%) 12%, hsl(232, 100%, 67%) 47%, hsl(212, 98%, 68%) 82%, hsl(154, 100%, 60%) 100%);
+  background-size: 200px;
+  background-clip: text;
+  font-weight: 900;
+  animation: 2s textAnimation linear infinite;
+}
+
+@keyframes barAnimation {
+  from { background-position-x: 0 }
+  to { background-position-x: 800px }
+}
+
+.bar {
+  background: linear-gradient(90deg, hsl(154, 100%, 75%), hsl(212, 98%, 68%), hsl(232, 85%, 57%), hsl(212, 98%, 68%), hsl(154, 100%, 75%), hsl(212, 98%, 68%), hsl(232, 85%, 57%), hsl(212, 98%, 68%), hsl(154, 100%, 75%));
+  background-size: 400px;
+  animation: 2s barAnimation linear infinite;
+}
+
+:is(.button, .buttonSecondary):disabled {
+  filter: brightness(0.5);
+  cursor: not-allowed;
+}
+
+.button {
+  background: linear-gradient(90deg, hsl(154, 100%, 75%), hsl(232, 85%, 57%), hsl(154, 100%, 75%));
+  background-size: 800px;
+  cursor: pointer;
+  transition: 0.5s;
+  
+  &:not(:disabled):hover {
+    animation: 2s barAnimation linear infinite;
+  }
+  &:not(:disabled):active {
+    animation: 0.5s barAnimation linear infinite;
+  }
+}
+
+.buttonSecondary {
+  border: 4px solid;
+  color: hsl(232, 85%, 57%);
+  border-color: hsl(232, 85%, 57%);
+  cursor: pointer;
+  transition: 2s;
+  
+  &:not(:disabled):hover {
+    color: hsl(154, 100%, 75%);
+    border-color: hsl(154, 100%, 75%);
+  }
+  &:not(:disabled):active {
+    color: hsl(232, 85%, 57%);
+    border-color: hsl(232, 85%, 57%);
+  }
+}
