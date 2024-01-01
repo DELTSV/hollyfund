@@ -49,7 +49,11 @@ export const CampaignContextWrapper = ({children}: Props) => {
   }
 
   useEffect(() => {
-    if (contract && userAddress && campaigns === undefined) updateCampaignsList()
+    if (contract && userAddress && campaigns === undefined) {
+      contract.events.NewCampaign().on("data", updateCampaignsList)
+      contract.events.NewInvestment().on("data", updateCampaignsList)
+      updateCampaignsList()
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contract, userAddress]);
 
@@ -59,13 +63,13 @@ export const CampaignContextWrapper = ({children}: Props) => {
 
   const createCampaign = (campaignName: string, campaignTargetInETH: string) => {
     if (!contract || !userAddress) return;
-    contract.methods.createCampaign(campaignName, Web3.utils.toWei(campaignTargetInETH, "ether")).send({ from: userAddress }).on("confirmation", updateCampaignsList);
+    contract.methods.createCampaign(campaignName, Web3.utils.toWei(campaignTargetInETH, "ether")).send({ from: userAddress });
   };
   const cancelInvestment = () => setCampaignToInvest(undefined);
   const invest = (value: string) => {
     if (!campaignToInvest || !contract || !userAddress) return;
     contract.methods.approve(contractAddress, value).send({ from: userAddress });
-    contract.methods.invest(campaignToInvest).send({ from: userAddress, value: value }).on("confirmation", updateCampaignsList);
+    contract.methods.invest(campaignToInvest).send({ from: userAddress, value: value });
   };
   const retrieveCampaignInvestment = (campaignName: string) => {
     if (!contract || !userAddress) return;
