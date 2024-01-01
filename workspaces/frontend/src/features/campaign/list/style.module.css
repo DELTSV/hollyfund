@@ -10,6 +10,7 @@
     list-style: none;
     gap: 1.5rem;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.658));
 }
 
 .header {

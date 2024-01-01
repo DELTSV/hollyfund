@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { CampaignContext, CampaignProgressBar } from "..";
 import { Web3Context } from "../../web3";
-import { Dialog } from "../../../components/dialog";
+import { Dialog, dialogStyle } from "../../../components/dialog";
 import { CampaignDetailsContribution } from "./CampaignDetailsContribution";
 import { CampaignDetailsClaiming } from "./CampaignDetailsClaiming";
+import { CampaignDetailsPossessionTag } from "./CampaignDetailsPossessionTag";
 
 export const CampaignDetails = () => {
   const {selectedCampaign, unselectCampaign, getCampaign, setCampaignToInvest, retrieveCampaignInvestment} = useContext(CampaignContext);
@@ -42,8 +43,11 @@ export const CampaignDetails = () => {
       y: selectedCampaign?.campaignCard?.y ?? 0,
     }}
   >
-    <section>
+    <section className={dialogStyle.horizontal}>
       <h1>{campaign?.title}</h1>
+      <CampaignDetailsPossessionTag campaignProducer={campaign?.producer??""}/>
+    </section>
+    <section>
       <CampaignProgressBar campaign={campaign} big/>
     </section>
     { userAddress?.toLowerCase() !== campaign?.producer.toLowerCase() ?
