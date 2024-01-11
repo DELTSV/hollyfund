@@ -1,5 +1,5 @@
 import { useSDK } from "@metamask/sdk-react"
-import { DispatchWithoutAction, ReactNode, createContext, useEffect, useMemo, useState } from "react"
+import { DispatchWithoutAction, ReactNode, createContext, useMemo, useState } from "react"
 import Web3 from "web3"
 
 type Web3ContextType = {
