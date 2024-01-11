@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState} from "react";
 import {Campaign, SelectedCampaign} from "../types";
 import {Web3Context} from "../../web3";
@@ -63,16 +64,20 @@ export const CampaignContextWrapper = ({children}: Props) => {
 
   const createCampaign = (campaignName: string, campaignTargetInETH: string) => {
     if (!contract || !userAddress) return;
+    // @ts-ignore
     contract.methods.createCampaign(campaignName, Web3.utils.toWei(campaignTargetInETH, "ether")).send({ from: userAddress });
   };
   const cancelInvestment = () => setCampaignToInvest(undefined);
   const invest = (value: string) => {
     if (!campaignToInvest || !contract || !userAddress) return;
+    // @ts-ignore
     contract.methods.approve(contractAddress, value).send({ from: userAddress });
+    // @ts-ignore
     contract.methods.invest(campaignToInvest).send({ from: userAddress, value: value });
   };
   const retrieveCampaignInvestment = (campaignName: string) => {
     if (!contract || !userAddress) return;
+    // @ts-ignore
     contract.methods.claim(campaignName).send({ from: userAddress });
   }
 
