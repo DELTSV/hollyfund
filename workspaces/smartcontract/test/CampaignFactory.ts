@@ -5,7 +5,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 describe("HollyFund", function () {
-  async function deployOneYearLockFixture() {
+  async function deployCampaignContractFixture() {
     const title = "The Matrix";
     const targetAmount = ethers.parseEther("9000");
     const investAmount = ethers.parseEther("10");
@@ -27,6 +27,7 @@ describe("HollyFund", function () {
       0n,
       targetAmount,
       owner.address,
+      false,
     ];
 
     return {contract, title, targetAmount, owner, otherAccount, investAmount, expectedCampaign};
@@ -35,7 +36,7 @@ describe("HollyFund", function () {
   describe('Create campaign', function () {
     it('should not create campaign', async () => {
       const {contract} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       await expect(contract.createCampaign(
@@ -46,7 +47,7 @@ describe("HollyFund", function () {
 
     it('should not create campaign if it already exists', async () => {
       const {contract, title, targetAmount} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       await expect(contract.createCampaign(
@@ -57,7 +58,7 @@ describe("HollyFund", function () {
 
     it('should create campaign', async () => {
       const {contract, targetAmount} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       await expect(contract.createCampaign(
@@ -68,7 +69,7 @@ describe("HollyFund", function () {
 
     it("Should emit an event on create a campaign", async function () {
       const {targetAmount, contract} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       await expect(contract.createCampaign("title", targetAmount))
@@ -80,7 +81,7 @@ describe("HollyFund", function () {
   describe("Transactions", function () {
     it("Should transfer tokens between accounts", async function () {
       const {otherAccount, contract} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       await contract.transfer(otherAccount.address, 50);
@@ -90,7 +91,7 @@ describe("HollyFund", function () {
 
     it("Should fail if sender doesn’t have enough tokens", async function () {
       const {contract, owner, otherAccount} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       const initialOwnerBalance = await contract.balanceOf(owner.address);
@@ -106,7 +107,7 @@ describe("HollyFund", function () {
 
     it("Should update balances after transfers", async function () {
       const {otherAccount, contract, owner} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       const initialOwnerBalance = await contract.balanceOf(owner.address);
@@ -125,7 +126,7 @@ describe("HollyFund", function () {
   describe("Invest", function () {
     it("Should invest in a campaign", async function () {
       const {contract, title, investAmount, otherAccount} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       await contract.connect(otherAccount).approve(contract.getAddress(), investAmount);
@@ -135,7 +136,7 @@ describe("HollyFund", function () {
 
     it("Should pay invest amount", async function () {
       const {contract, title, investAmount, otherAccount} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       await contract.connect(otherAccount).approve(contract.getAddress(), investAmount);
@@ -147,7 +148,7 @@ describe("HollyFund", function () {
 
     it("Should retrieve the money from the sender", async function () {
       const {contract, title, otherAccount, investAmount} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       const initialBalance = await otherAccount.provider.getBalance(otherAccount.getAddress());
@@ -168,7 +169,7 @@ describe("HollyFund", function () {
 
     it("Should send the money to the contract", async function () {
       const {contract, title, otherAccount, investAmount} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       const initialBalance = await contract.balanceOf(contract.getAddress());
@@ -183,7 +184,7 @@ describe("HollyFund", function () {
   describe("Get all campaigns", function () {
     it("Should get all campaigns", async function () {
       const {contract, expectedCampaign} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       const result = await contract.getAllCampaigns();
@@ -195,7 +196,7 @@ describe("HollyFund", function () {
   describe("Get campaign", function () {
     it("Should not get a campaign", async function () {
       const {contract} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       await expect(contract.getCampaign("title"))
@@ -204,7 +205,7 @@ describe("HollyFund", function () {
 
     it("Should get a campaign", async function () {
       const {contract, title, expectedCampaign} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       expect(await contract.getCampaign(title)).not.to.be.eq(expectedCampaign);
@@ -214,7 +215,7 @@ describe("HollyFund", function () {
   describe("Claim funds", function () {
     it("Should not claim funds if campaign doesnt exists", async function () {
       const {contract} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       await expect(contract.claim("title"))
@@ -223,7 +224,7 @@ describe("HollyFund", function () {
 
     it("Should not claim funds if campaign not completed", async function () {
       const {contract, title} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       await expect(contract.claim(title))
@@ -232,7 +233,7 @@ describe("HollyFund", function () {
 
     it("Should not claim funds if im not the producer", async function () {
       const {contract, title, otherAccount, targetAmount} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       await contract.connect(otherAccount).approve(contract.getAddress(), targetAmount);
@@ -245,7 +246,7 @@ describe("HollyFund", function () {
 
     it("Should claim funds", async function () {
       const {contract, title, otherAccount, targetAmount} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       await contract.connect(otherAccount).approve(contract.getAddress(), targetAmount);
@@ -257,7 +258,7 @@ describe("HollyFund", function () {
 
     it("Should transfert the money to the owner", async function () {
       const {contract, title, otherAccount, targetAmount, owner} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       const initialBalance = await owner.provider.getBalance(owner.getAddress());
@@ -276,7 +277,7 @@ describe("HollyFund", function () {
 
     it("Should retrieve the money from the contract", async function () {
       const {contract, title, otherAccount, targetAmount} = await loadFixture(
-        deployOneYearLockFixture
+        deployCampaignContractFixture
       );
 
       const initialBalance = await contract.balanceOf(contract.getAddress());
