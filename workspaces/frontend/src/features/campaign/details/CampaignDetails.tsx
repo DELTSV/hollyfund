@@ -51,8 +51,8 @@ export const CampaignDetails = () => {
       <CampaignProgressBar campaign={campaign} big/>
     </section>
     { userAddress?.toLowerCase() !== campaign?.producer.toLowerCase() ?
-      <CampaignDetailsContribution onInvestmentClick={handleInvestmentButtonClick}/> :
-      <CampaignDetailsClaiming onClaimClick={handleClaimButtonClick}  funds={campaign?.totalAmount ?? 0} target={campaign?.targetAmount ?? 0}/>
+      <CampaignDetailsContribution onInvestmentClick={handleInvestmentButtonClick} completed={campaign?.completed ?? false}/> :
+      <CampaignDetailsClaiming onClaimClick={handleClaimButtonClick}  funds={campaign?.totalAmount ?? 0} target={campaign?.targetAmount ?? 0}  completed={campaign?.completed ?? false}/>
     }
   </Dialog>;
 }
