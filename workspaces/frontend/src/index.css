@@ -56,7 +56,7 @@
                 padding: 200px;
                 margin: -200px;
                 opacity: 0.5;
-    
+
             }
             &:nth-of-type(3) {
                 filter: contrast(400) blur(4px) contrast(400) blur(4px) contrast(200) blur(2px);
