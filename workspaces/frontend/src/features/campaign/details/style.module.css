@@ -7,3 +7,13 @@
   bottom: 90%;
   left: 0;
 }
+.doneTag {
+  filter: hue-rotate(-45deg);
+  color: black;
+  border-radius: 2rem;
+  padding-block: 0.3rem;
+  padding-inline: 0.6rem;
+  height: max-content;
+  bottom: 90%;
+  left: 0;
+}

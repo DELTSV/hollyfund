@@ -112,3 +112,14 @@
     bottom: 90%;
     left: 0;
 }
+
+.doneTag {
+    color: black;
+    filter: hue-rotate(-45deg);
+    border-radius: 2rem;
+    padding-block: 0.3rem;
+    padding-inline: 0.6rem;
+    position: absolute;
+    bottom: 90%;
+    right: 0;
+}

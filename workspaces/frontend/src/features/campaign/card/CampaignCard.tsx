@@ -1,7 +1,8 @@
 import {Campaign, CampaignProgressBar, SelectedCampaign} from "../";
 import {createRef} from "react";
 import style from "./style.module.css";
-import { CampaignCardPossessionTag } from "./CampaignCardPossessionCard";
+import { CampaignCardPossessionTag } from "./CampaignCardPossessionTag";
+import { CampaignCardDoneTag } from "./CampaignCardDoneTag";
 
 type Props = {
   isActive: boolean;
@@ -31,6 +32,7 @@ export const CampaignCard = ({isActive, campaign, onClick}: Props) => {
         <h3>{campaign.title}</h3>
         <CampaignProgressBar campaign={campaign}/>
         <CampaignCardPossessionTag campaignProducer={campaign.producer}/>
+        <CampaignCardDoneTag completed={campaign.completed}/>
       </button>
     }
   </li>;
